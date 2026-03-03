@@ -26,6 +26,7 @@ import Home from './pages/Home';
 import Trip from './pages/Trip';
 import Save from './pages/Save';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 /* CSS */
 import '@ionic/react/css/core.css';
@@ -50,6 +51,7 @@ const App: React.FC = () => (
           <Route exact path="/trip" component={Trip} />
           <Route exact path="/save" component={Save} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/edit-profile" component={EditProfile} />
           <Redirect exact from="/" to="/home" />
         </IonRouterOutlet>
 
