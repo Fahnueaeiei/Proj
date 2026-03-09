@@ -1,27 +1,44 @@
 import React, { useState } from 'react';
 import { useIonRouter } from '@ionic/react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import './Register.css';
 
 const RegisterPage: React.FC = () => {
   const router = useIonRouter();
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleRegister = async () => {
-    if (!firstName || !lastName || !email || !password) {
+    if (!fullName || !username || !phoneNumber || !email || !password) {
       alert('Please fill in all fields.');
       return;
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const uid = userCredential.user.uid;
+
+      await setDoc(doc(db, 'profile', uid), {
+        fullName,
+        username,
+        phoneNumber,
+        email
+      });
+
       alert('Register successful');
       router.push('/login');
+
     } catch (error) {
       alert('Register failed');
       console.error(error);
@@ -30,7 +47,6 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="register-page">
-
       <div className="register-content">
 
         <div className="register-header">
@@ -39,18 +55,27 @@ const RegisterPage: React.FC = () => {
         </div>
 
         <div className="register-field">
-          <label>First Name</label>
-          <input value={firstName} onChange={e => setFirstName(e.target.value)} />
+          <label>Full Name</label>
+          <input
+            value={fullName}
+            onChange={e => setFullName(e.target.value)}
+          />
         </div>
 
         <div className="register-field">
-          <label>Last Name</label>
-          <input value={lastName} onChange={e => setLastName(e.target.value)} />
+          <label>Username</label>
+          <input
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
         </div>
 
         <div className="register-field">
           <label>Email</label>
-          <input value={email} onChange={e => setEmail(e.target.value)} />
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
         </div>
 
         <div className="register-field">
@@ -59,6 +84,15 @@ const RegisterPage: React.FC = () => {
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+
+        <div className="register-field">
+          <label>Phone Number</label>
+          <input
+            type="tel"
+            value={phoneNumber}
+            onChange={e => setPhoneNumber(e.target.value)}
           />
         </div>
 

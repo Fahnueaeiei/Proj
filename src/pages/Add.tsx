@@ -3,24 +3,18 @@ import {
   IonContent,
   IonHeader,
   IonToolbar,
-  IonButtons,
-  IonBackButton,
   IonTitle,
   IonItem,
   IonLabel,
   IonInput,
   IonButton,
   IonIcon,
-  IonLoading,
   useIonToast
 } from '@ionic/react';
 
-import { calendarOutline, cloudUploadOutline } from 'ionicons/icons';
+import { cloudUploadOutline } from 'ionicons/icons';
 import { useState } from 'react';
-import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useHistory } from 'react-router-dom';
-import './Add.css';
 
 const AddTrip: React.FC = () => {
   const history = useHistory();
@@ -29,135 +23,73 @@ const AddTrip: React.FC = () => {
   const [tripName, setTripName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [budget, setBudget] = useState<number | undefined>();
-  const [loading, setLoading] = useState(false);
+  const [budget, setBudget] = useState<number>(0);
 
-  const isValid =
-    tripName.trim() !== '' &&
-    startDate !== '' &&
-    endDate !== '' &&
-    new Date(endDate) >= new Date(startDate);
-
-  const handleAddTrip = async () => {
-    if (!isValid) {
+  const handleNext = () => {
+    if (!tripName || !startDate || !endDate) {
       present({
-        message: 'Please fill all fields correctly',
+        message: 'Please fill all fields',
         duration: 2000,
         color: 'danger'
       });
       return;
     }
 
-    try {
-      setLoading(true);
-
-      await addDoc(collection(db, 'trips'), {
-        name: tripName,
-        startDate,
-        endDate,
-        budget: budget || 0,
-        createdAt: serverTimestamp()
-      });
-
+    if (new Date(endDate) < new Date(startDate)) {
       present({
-        message: 'Trip created successfully!',
-        duration: 2000,
-        color: 'success'
-      });
-
-      history.push('/Trip');
-
-    } catch (error) {
-      present({
-        message: 'Error creating trip',
+        message: 'End date must be after start date',
         duration: 2000,
         color: 'danger'
       });
-      console.error(error);
-    } finally {
-      setLoading(false);
+      return;
     }
+
+    history.push('/add-activity', {
+      tripName,
+      startDate,
+      endDate,
+      budget
+    });
   };
 
   return (
     <IonPage>
-
       <IonHeader>
         <IonToolbar>
-          <IonTitle className="ion-text-center">
-            Create New Trip
-          </IonTitle>
+          <IonTitle>Create New Trip</IonTitle>
         </IonToolbar>
       </IonHeader>
 
       <IonContent className="ion-padding">
 
-        {/* Upload Box */}
         <div className="upload-box">
           <IonIcon icon={cloudUploadOutline} size="large" />
           <p>Upload Trip Cover Image</p>
         </div>
 
-        {/* Trip Name */}
-        <IonItem className="custom-item">
+        <IonItem>
           <IonLabel position="stacked">Trip Name</IonLabel>
-          <IonInput
-            value={tripName}
-            placeholder="Enter trip name"
-            onIonChange={e => setTripName(e.detail.value!)}
-          />
+          <IonInput value={tripName} onIonChange={e => setTripName(e.detail.value!)} />
         </IonItem>
 
-        {/* Start Date */}
-        <IonItem className="custom-item">
+        <IonItem>
           <IonLabel position="stacked">Start Date</IonLabel>
-          <IonInput
-            type="date"
-            value={startDate}
-            onIonChange={e => setStartDate(e.detail.value!)}
-          />
+          <IonInput type="date" value={startDate} onIonChange={e => setStartDate(e.detail.value!)} />
         </IonItem>
 
-        {/* End Date */}
-        <IonItem className="custom-item">
+        <IonItem>
           <IonLabel position="stacked">End Date</IonLabel>
-          <IonInput
-            type="date"
-            value={endDate}
-            onIonChange={e => setEndDate(e.detail.value!)}
-          />
+          <IonInput type="date" value={endDate} onIonChange={e => setEndDate(e.detail.value!)} />
         </IonItem>
 
-        {/* Budget */}
-        <IonItem className="custom-item">
-          <IonLabel position="stacked">Trip Budget</IonLabel>
-          <IonInput
-            type="number"
-            value={budget}
-            placeholder="Enter your budget"
-            onIonChange={e => setBudget(Number(e.detail.value))}
-          />
+        <IonItem>
+          <IonLabel position="stacked">Budget</IonLabel>
+          <IonInput type="number" value={budget} onIonChange={e => setBudget(Number(e.detail.value || 0))} />
         </IonItem>
 
-        {/* Buttons */}
-        <IonButton
-          expand="block"
-          className="next-btn"
-          onClick={handleAddTrip}
-          disabled={!isValid || loading}
-        >
+        <IonButton expand="block" onClick={handleNext}>
           Next
         </IonButton>
-
-        <IonButton
-          expand="block"
-          fill="outline"
-          routerLink="/home"
-        >
-          Cancel
-        </IonButton>
-
-        <IonLoading isOpen={loading} message="Saving..." />
 
       </IonContent>
     </IonPage>

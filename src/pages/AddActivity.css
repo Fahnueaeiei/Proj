@@ -1,0 +1,29 @@
+.activity-page {
+  --background: #f8f8f8;
+}
+
+.trip-summary {
+  margin-bottom: 20px;
+}
+
+.trip-summary h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.trip-summary p {
+  color: #666;
+}
+
+.trip-summary span {
+  color: #f4b400;
+}
+
+.activity-form {
+  margin-bottom: 20px;
+}
+
+.activity-list ion-card {
+  border-radius: 16px;
+  margin-bottom: 12px;
+}

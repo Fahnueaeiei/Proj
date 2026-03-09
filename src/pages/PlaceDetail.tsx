@@ -6,13 +6,20 @@ import {
   IonTitle,
   IonButtons,
   IonBackButton,
-  IonSpinner
+  IonSpinner,
+  IonButton
 } from "@ionic/react";
 
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+
+import { db, auth } from "../firebase";
+import {
+  doc,
+  getDoc,
+  addDoc,
+  collection
+} from "firebase/firestore";
 
 interface Place {
   name: string;
@@ -25,6 +32,8 @@ interface Place {
 
 const PlaceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +52,22 @@ const PlaceDetail: React.FC = () => {
     fetchPlace();
   }, [id]);
 
+  const handleAddFavorite = async () => {
+    if (!place) return;
+
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+
+    await addDoc(collection(db, "favorites"), {
+      uid,
+      name: place.name,
+      image: place.image,
+      location: place.location
+    });
+
+    history.push("/save");
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -50,6 +75,7 @@ const PlaceDetail: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
+
           <IonTitle>{place?.name || "Place Detail"}</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -63,12 +89,34 @@ const PlaceDetail: React.FC = () => {
             <img
               src={place.image}
               alt={place.name}
-              style={{ width: "100%", borderRadius: "12px" }}
+              style={{
+                width: "100%",
+                borderRadius: "16px",
+                marginBottom: "20px"
+              }}
             />
 
-            <h2 style={{ marginTop: "16px" }}>{place.name}</h2>
+            <h2>{place.name}</h2>
+
             <p>{place.location}</p>
+
             <p>{place.description}</p>
+
+            <IonButton
+              expand="block"
+              onClick={handleAddFavorite}
+            >
+              Add to Favorite
+            </IonButton>
+
+            <IonButton
+              expand="block"
+              fill="outline"
+              href={`https://www.google.com/maps?q=${place.lat},${place.lng}`}
+              target="_blank"
+            >
+              Open in Maps
+            </IonButton>
           </>
         )}
 

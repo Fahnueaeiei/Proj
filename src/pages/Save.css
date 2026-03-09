@@ -1,0 +1,53 @@
+.save-page {
+  --background: #ffffff;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.new-collection {
+  text-align: right;
+  color: #f4b400;
+  font-weight: 500;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.collection-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: none;
+  text-align: center;
+}
+
+.collection-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.collection-card ion-card-content {
+  font-size: 14px;
+  color: #666;
+  padding-top: 8px;
+}
+
+ion-searchbar {
+  --border-radius: 12px;
+  --box-shadow: none;
+  --background: #f7f7f7;
+}
+
+ion-fab-button {
+  --border-radius: 50%;
+  width: 72px;
+  height: 72px;
+}

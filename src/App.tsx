@@ -30,6 +30,8 @@ import PlaceDetail from './pages/PlaceDetail';
 import EditProfile from './pages/EditProfile';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
+import AddActivity from './pages/AddActivity';
+import TripDetail from './pages/TripDetail';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -50,26 +52,31 @@ const AppContent: React.FC = () => {
     location.pathname === '/login' ||
     location.pathname === '/register' ||
     location.pathname.includes('/edit-trip') ||
-    location.pathname.includes('/edit-profile');
+    location.pathname.includes('/edit-profile') ||
+    location.pathname.includes('/add-activity');
 
   return (
     <IonTabs>
 
       <IonRouterOutlet>
+
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
 
         <Route exact path="/home" component={Home} />
         <Route exact path="/trip" component={Trip} />
         <Route exact path="/add" component={AddTrip} />
+        <Route exact path="/add-activity" component={AddActivity} />
         <Route exact path="/save" component={Save} />
         <Route exact path="/profile" component={Profile} />
 
         <Route exact path="/place/:id" component={PlaceDetail} />
         <Route exact path="/edit-trip/:id" component={EditTrip} />
         <Route exact path="/edit-profile" component={EditProfile} />
+        <Route exact path="/trip-detail/:id" component={TripDetail} />
 
         <Redirect exact from="/" to="/login" />
+
       </IonRouterOutlet>
 
       {!hideTabBar && (
@@ -90,9 +97,9 @@ const AppContent: React.FC = () => {
             <IonLabel>Add Trip</IonLabel>
           </IonTabButton>
 
-          <IonTabButton tab="save" href="/save">
+          <IonTabButton tab="Favorite" href="/save">
             <IonIcon icon={bookmarkOutline} />
-            <IonLabel>Save</IonLabel>
+            <IonLabel>Favorite</IonLabel>
           </IonTabButton>
 
           <IonTabButton tab="profile" href="/profile">

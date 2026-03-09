@@ -28,17 +28,20 @@ import "./Profile.css";
 const Profile: React.FC = () => {
   const history = useHistory();
 
-  const [username, setUsername] = useState('');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const docRef = doc(db, 'profile', 'user1');
+      const uid = auth.currentUser?.uid;
+      if (!uid) return;
+
+      const docRef = doc(db, 'profile', uid);
       const snap = await getDoc(docRef);
 
       if (snap.exists()) {
         const data = snap.data();
-        setUsername(data.username || '');
+        setFullName(data.fullName || '');
         setEmail(data.email || '');
       }
     };
@@ -48,7 +51,7 @@ const Profile: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut(auth);
-    history.replace('/login');
+    window.location.href = '/login';
   };
 
   return (
@@ -65,7 +68,7 @@ const Profile: React.FC = () => {
           </IonAvatar>
 
           <div className="profile-info">
-            <h3>{username}</h3>
+            <h3>{fullName}</h3>
             <p>{email}</p>
           </div>
         </div>

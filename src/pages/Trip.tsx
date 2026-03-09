@@ -4,9 +4,8 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
-  IonList,
-  IonItem,
-  IonLabel,
+  IonCard,
+  IonCardContent,
   IonSpinner
 } from '@ionic/react';
 
@@ -14,12 +13,13 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { db } from '../firebase';
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot
-} from 'firebase/firestore';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+
+interface Activity {
+  title: string;
+  time: string;
+  location: string;
+}
 
 interface TripType {
   id: string;
@@ -27,6 +27,8 @@ interface TripType {
   startDate: string;
   endDate: string;
   budget: number;
+  image?: string;
+  activities?: Activity[];
 }
 
 const Trip: React.FC = () => {
@@ -36,13 +38,12 @@ const Trip: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const q = query(
-      collection(db, 'trips'),
-      orderBy('createdAt', 'desc')
-    );
+    setLoading(true);
+
+    const q = query(collection(db, 'trips'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tripData: TripType[] = snapshot.docs.map(doc => ({
+      const tripData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as TripType[];
@@ -66,26 +67,24 @@ const Trip: React.FC = () => {
 
         {loading && <IonSpinner />}
 
-        {!loading && trips.length === 0 && (
-          <p>No trips yet. Create one!</p>
-        )}
+        {trips.map(trip => (
+          <IonCard
+            key={trip.id}
+            onClick={() => history.push(`/trip-detail/${trip.id}`)}
+          >
+            <img
+              src={trip.image || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e'}
+              alt={trip.name}
+            />
 
-        <IonList>
-          {trips.map(trip => (
-            <IonItem
-              button
-              detail={true}
-              key={trip.id}
-              onClick={() => history.push(`/edit-trip/${trip.id}`)}
-            >
-              <IonLabel>
-                <h2>{trip.name}</h2>
-                <p>{trip.startDate} - {trip.endDate}</p>
-                <p>Budget: {trip.budget} THB</p>
-              </IonLabel>
-            </IonItem>
-          ))}
-        </IonList>
+            <IonCardContent>
+              <h2>{trip.name}</h2>
+              <p>{trip.startDate} - {trip.endDate}</p>
+              <span>{trip.budget} THB</span>
+              <p>{trip.activities?.length || 0} Activities</p>
+            </IonCardContent>
+          </IonCard>
+        ))}
 
       </IonContent>
     </IonPage>

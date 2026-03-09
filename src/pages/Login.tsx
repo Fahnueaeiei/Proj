@@ -19,9 +19,21 @@ const LoginPage: React.FC = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+
+      alert('Login successful');
       router.push('/home');
-    } catch (error) {
-      alert('Login failed');
+
+    } catch (error: any) {
+      if (error.code === 'auth/user-not-found') {
+        alert('User not found');
+      } else if (error.code === 'auth/wrong-password') {
+        alert('Wrong password');
+      } else if (error.code === 'auth/invalid-credential') {
+        alert('Invalid email or password');
+      } else {
+        alert('Login failed');
+      }
+
       console.error(error);
     }
   };
@@ -58,7 +70,7 @@ const LoginPage: React.FC = () => {
               className="eye-btn"
               onClick={() => setShowPassword(!showPassword)}
             >
-              👁️
+              {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </div>
