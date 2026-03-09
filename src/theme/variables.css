@@ -1,5 +1,6 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
+
 .custom-tabbar {
   --background: #ffffff;
   border-top: none;
@@ -12,7 +13,7 @@ http://ionicframework.com/docs/theming/ */
 }
 
 .custom-tabbar ion-tab-button.tab-selected {
-  color: #f7b500;
+  color: #0003D1;
 }
 
 .custom-fab {
@@ -30,37 +31,3 @@ http://ionicframework.com/docs/theming/ */
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
 }
 
-.fab-container {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.custom-fab {
-  --background: #f7b500;
-  width: 60px;
-  height: 60px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* ทำให้ TabBar สูงขึ้น */
-.custom-tabbar {
-  --background: #ffffff;
-  height: 75px;
-  padding-bottom: 10px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
-
-/* จัดตำแหน่ง FAB */
-.center-fab {
-  bottom: 20px;   /* ปรับตำแหน่งขึ้นลง */
-}
-
-/* ปุ่ม */
-.custom-fab {
-  --background: #f7b500;
-  width: 65px;
-  height: 65px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-}

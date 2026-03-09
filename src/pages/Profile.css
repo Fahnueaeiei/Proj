@@ -1,0 +1,75 @@
+*{
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-content {
+  --background: #F8FAFC;
+  padding: 60px;
+}
+
+/* Custom Top */
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.profile-top h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0F172A;
+  font-size: 30px;
+  font-weight: bold;    
+  flex: 1;
+}
+
+/* Profile Card */
+.profile-card {
+  background: #2563EB;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px;
+}
+
+.profile-card ion-avatar {
+  width: 60px;
+  height: 60px;
+}
+
+.profile-info h3 {
+  margin: 0;
+}
+
+.profile-info p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+/* Menu */
+.profile-menu ion-item {
+  --ripple-color: transparent;
+
+  background: #ffffff;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  color: #0F172A;
+  margin: 20px;
+}
+
+.profile-menu ion-icon {
+  color: #2563EB;
+}
+
+/* Logout */
+.logout-container {
+  margin: 30px;
+  align-items: center;
+}

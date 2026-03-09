@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -18,7 +18,7 @@ import Save from './pages/Save';
 import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Login from "./pages/Login";
-
+import EditProfile from './pages/EditProfile';
 
 import '@ionic/react/css/core.css';
 import './theme/variables.css';
@@ -28,29 +28,28 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      {/* ใช้ IonTabs ครอบเฉพาะส่วนที่ต้องการแสดง Tab Bar */}
       <IonTabs>
         <IonRouterOutlet>
-          {/* หน้าที่ "ไม่มี" Tab Bar ให้วางไว้นอก IonTabs (ถ้าทำได้) 
-              แต่ถ้าอยากใช้ URL ปกติ ให้วางรวมกันแล้วจัดการที่ IonTabBar */}
+
+          <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          
+
           <Route exact path="/home" component={Home} />
           <Route exact path="/trip" component={Trip} />
           <Route exact path="/save" component={Save} />
           <Route exact path="/profile" component={Profile} />
-          <Route path="/login" component={Login} exact />
-          <Route path="/register" component={Register} exact />
-          
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
+          <Route exact path="/edit-profile" component={EditProfile} />
+
+          <Redirect exact from="/" to="/home" />
+
         </IonRouterOutlet>
 
-        {/* เทคนิค: ใช้ความสามารถของ CSS ซ่อน Tab Bar ในหน้า Register */}
-        <IonTabBar slot="bottom" className="custom-tabbar" 
-          style={{ display: window.location.pathname === '/register' ? 'none' : 'flex' }}>
-          
+        <IonTabBar
+          slot="bottom"
+          className="custom-tabbar"
+          style={{ display: window.location.pathname === '/register' ? 'none' : 'flex' }}
+        >
+
           <IonTabButton tab="home" href="/home">
             <IonIcon icon={homeOutline} />
             <IonLabel>Home</IonLabel>
@@ -70,6 +69,7 @@ const App: React.FC = () => (
             <IonIcon icon={personOutline} />
             <IonLabel>Profile</IonLabel>
           </IonTabButton>
+
         </IonTabBar>
       </IonTabs>
     </IonReactRouter>
