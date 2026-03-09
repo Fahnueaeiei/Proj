@@ -65,7 +65,7 @@ const AddTrip: React.FC = () => {
         color: 'success'
       });
 
-      history.push('/home');
+      history.push('/Trip');
 
     } catch (error) {
       present({

@@ -1,0 +1,21 @@
+.edit-page {
+  --background: #f8f9fb;
+  padding: 16px;
+}
+
+.edit-input {
+  margin-bottom: 14px;
+  border-radius: 12px;
+  --background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.save-btn {
+  margin-top: 20px;
+  --border-radius: 12px;
+}
+
+.delete-btn {
+  margin-top: 12px;
+  --border-radius: 12px;
+}

@@ -11,6 +11,8 @@ import {
 } from '@ionic/react';
 
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { db } from '../firebase';
 import {
   collection,
@@ -30,6 +32,8 @@ interface TripType {
 const Trip: React.FC = () => {
   const [trips, setTrips] = useState<TripType[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const history = useHistory();
 
   useEffect(() => {
     const q = query(
@@ -52,7 +56,6 @@ const Trip: React.FC = () => {
 
   return (
     <IonPage>
-
       <IonHeader>
         <IonToolbar>
           <IonTitle>My Trips</IonTitle>
@@ -69,7 +72,12 @@ const Trip: React.FC = () => {
 
         <IonList>
           {trips.map(trip => (
-            <IonItem key={trip.id}>
+            <IonItem
+              button
+              detail={true}
+              key={trip.id}
+              onClick={() => history.push(`/edit-trip/${trip.id}`)}
+            >
               <IonLabel>
                 <h2>{trip.name}</h2>
                 <p>{trip.startDate} - {trip.endDate}</p>
@@ -80,7 +88,6 @@ const Trip: React.FC = () => {
         </IonList>
 
       </IonContent>
-
     </IonPage>
   );
 };

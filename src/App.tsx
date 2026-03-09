@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -7,8 +7,6 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonFab,
-  IonFabButton,
   setupIonicReact
 } from '@ionic/react';
 
@@ -27,8 +25,12 @@ import Trip from './pages/Trip';
 import Save from './pages/Save';
 import Profile from './pages/Profile';
 import AddTrip from './pages/Add';
+import EditTrip from './pages/EditTrip';
+import PlaceDetail from './pages/PlaceDetail';
+import EditProfile from './pages/EditProfile';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
 
-/* CSS */
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -38,25 +40,39 @@ import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 import '@ionic/react/css/palettes/dark.system.css';
 import './theme/variables.css';
-import PlaceDetail from './pages/PlaceDetail';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
+const AppContent: React.FC = () => {
+  const location = useLocation();
 
-        <IonRouterOutlet>
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/trip" component={Trip} />
-          <Route exact path="/add" component={AddTrip} />
-          <Route exact path="/save" component={Save} />
-          <Route exact path="/profile" component={Profile} />
-          <Redirect exact from="/" to="/home" />
-          <Route exact path="/place/:id" component={PlaceDetail} />
-        </IonRouterOutlet>
+  const hideTabBar =
+    location.pathname === '/login' ||
+    location.pathname === '/register' ||
+    location.pathname.includes('/edit-trip') ||
+    location.pathname.includes('/edit-profile');
 
+  return (
+    <IonTabs>
+
+      <IonRouterOutlet>
+        <Route exact path="/login" component={LoginPage} />
+        <Route exact path="/register" component={RegisterPage} />
+
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/trip" component={Trip} />
+        <Route exact path="/add" component={AddTrip} />
+        <Route exact path="/save" component={Save} />
+        <Route exact path="/profile" component={Profile} />
+
+        <Route exact path="/place/:id" component={PlaceDetail} />
+        <Route exact path="/edit-trip/:id" component={EditTrip} />
+        <Route exact path="/edit-profile" component={EditProfile} />
+
+        <Redirect exact from="/" to="/login" />
+      </IonRouterOutlet>
+
+      {!hideTabBar && (
         <IonTabBar slot="bottom" className="custom-tabbar">
 
           <IonTabButton tab="home" href="/home">
@@ -85,7 +101,16 @@ const App: React.FC = () => (
           </IonTabButton>
 
         </IonTabBar>
-      </IonTabs>
+      )}
+
+    </IonTabs>
+  );
+};
+
+const App: React.FC = () => (
+  <IonApp>
+    <IonReactRouter>
+      <AppContent />
     </IonReactRouter>
   </IonApp>
 );

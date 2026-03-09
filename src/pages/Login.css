@@ -1,0 +1,83 @@
+.login-page {
+  font-family: 'Nunito', sans-serif;
+  background: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.login-content {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.login-header p {
+  font-size: 14px;
+  color: #888;
+}
+
+.login-field {
+  margin-bottom: 18px;
+}
+
+.login-field label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.login-field input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+  outline: none;
+}
+
+.password-row {
+  display: flex;
+  align-items: center;
+}
+
+.eye-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.signup-row {
+  text-align: center;
+  margin-top: 24px;
+  color: #888;
+}
+
+.signup-row span {
+  color: #2563eb;
+  font-weight: bold;
+  cursor: pointer;
+}
