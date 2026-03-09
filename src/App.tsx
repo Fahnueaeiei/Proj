@@ -32,6 +32,8 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import AddActivity from './pages/AddActivity';
 import TripDetail from './pages/TripDetail';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
@@ -74,6 +76,8 @@ const AppContent: React.FC = () => {
         <Route exact path="/edit-trip/:id" component={EditTrip} />
         <Route exact path="/edit-profile" component={EditProfile} />
         <Route exact path="/trip-detail/:id" component={TripDetail} />
+        <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+        <Route exact path="/terms-and-conditions" component={TermsAndConditions} />
 
         <Redirect exact from="/" to="/login" />
 

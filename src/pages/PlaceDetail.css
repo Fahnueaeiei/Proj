@@ -1,0 +1,120 @@
+.place-detail-page {
+  --background: #f0f4f8;
+}
+
+.spinner-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* Hero — same pattern as TripDetail */
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.hero-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+}
+
+.hero-title {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.hero-chip ion-icon {
+  font-size: 13px;
+}
+
+/* Body */
+.detail-body {
+  padding: 20px 16px 40px;
+}
+
+/* Badges */
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.detail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  color: #2563eb;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.detail-badge.highlight {
+  background: #fefce8;
+  color: #ca8a04;
+}
+
+.detail-badge ion-icon {
+  font-size: 14px;
+}
+
+/* Description */
+.info-section {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px;
+}
+
+.description-text {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.8;
+  margin: 0;
+}

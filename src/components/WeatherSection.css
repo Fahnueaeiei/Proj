@@ -1,0 +1,24 @@
+.weather-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 10px;
+}
+
+.weather-item {
+  min-width: 120px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.weather-item img {
+  width: 50px;
+}
+
+.temp {
+  font-size: 18px;
+  font-weight: bold;
+}

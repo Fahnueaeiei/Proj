@@ -12,8 +12,16 @@ import {
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { db } from '../firebase';
-import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+
+import {
+  collection,
+  query,
+  where,
+  onSnapshot
+} from 'firebase/firestore';
+
+import './Trip.css';
 
 interface Activity {
   title: string;
@@ -38,21 +46,37 @@ const Trip: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    setLoading(true);
+    let unsubscribeTrips: any = null;
 
-    const q = query(collection(db, 'trips'));
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        setTrips([]);
+        setLoading(false);
+        return;
+      }
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const tripData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as TripType[];
+      setLoading(true);
 
-      setTrips(tripData);
-      setLoading(false);
+      const q = query(
+        collection(db, 'trips'),
+        where('uid', '==', user.uid)
+      );
+
+      unsubscribeTrips = onSnapshot(q, (snapshot) => {
+        const tripData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as TripType[];
+
+        setTrips(tripData);
+        setLoading(false);
+      });
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeTrips) unsubscribeTrips();
+    };
   }, []);
 
   return (
@@ -63,25 +87,40 @@ const Trip: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="ion-padding">
+      <IonContent className="trip-page ion-padding">
 
         {loading && <IonSpinner />}
 
-        {trips.map(trip => (
+        {!loading && trips.length === 0 && (
+          <p>No trips yet. Create one!</p>
+        )}
+
+        {!loading && trips.map(trip => (
           <IonCard
             key={trip.id}
+            className="trip-card"
             onClick={() => history.push(`/trip-detail/${trip.id}`)}
           >
             <img
-              src={trip.image || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e'}
+              src={
+                trip.image ||
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+              }
               alt={trip.name}
             />
 
             <IonCardContent>
               <h2>{trip.name}</h2>
-              <p>{trip.startDate} - {trip.endDate}</p>
+
+              <p>
+                {trip.startDate} - {trip.endDate}
+              </p>
+
               <span>{trip.budget} THB</span>
-              <p>{trip.activities?.length || 0} Activities</p>
+
+              {trip.activities && (
+                <p>{trip.activities.length} Activities</p>
+              )}
             </IonCardContent>
           </IonCard>
         ))}

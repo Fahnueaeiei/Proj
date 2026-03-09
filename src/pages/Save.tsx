@@ -1,27 +1,34 @@
 import {
   IonPage,
   IonContent,
-  IonSearchbar,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonGrid,
   IonRow,
   IonCol,
   IonCard,
-  IonCardContent
+  IonCardContent,
+  IonButton
 } from '@ionic/react';
 
 import { useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
+
 import {
   collection,
-  onSnapshot,
   query,
-  where
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc
 } from 'firebase/firestore';
 
 import './Save.css';
 
 interface FavoriteItem {
   id: string;
+  placeId: string;
   name: string;
   image: string;
   location: string;
@@ -45,19 +52,34 @@ const Save: React.FC = () => {
         ...doc.data()
       })) as FavoriteItem[];
 
-      setFavorites(data);
+      const unique = data.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.placeId === item.placeId)
+      );
+
+      setFavorites(unique);
     });
 
     return () => unsubscribe();
   }, []);
 
+  const handleDelete = async (id: string) => {
+    await deleteDoc(doc(db, 'favorites', id));
+  };
+
   return (
     <IonPage>
-      <IonContent className="save-page">
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Favorites</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-        <h2 className="title">Favorite Places</h2>
+      <IonContent className="save-page ion-padding">
 
-        <IonSearchbar placeholder="Search Favorite Places" />
+        {favorites.length === 0 && (
+          <p>No favorites yet</p>
+        )}
 
         <IonGrid>
           <IonRow>
@@ -69,6 +91,15 @@ const Save: React.FC = () => {
                   <IonCardContent>
                     <h3>{item.name}</h3>
                     <p>{item.location}</p>
+
+                    <IonButton
+                      color="danger"
+                      size="small"
+                      expand="block"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      Remove
+                    </IonButton>
                   </IonCardContent>
                 </IonCard>
               </IonCol>

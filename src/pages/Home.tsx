@@ -11,16 +11,22 @@ import {
 
 import { useEffect, useState } from "react";
 import { auth, db } from "../firebase";
+
 import {
   collection,
   onSnapshot,
   doc,
   getDoc,
-  addDoc
+  addDoc,
+  query,
+  where,
+  getDocs
 } from "firebase/firestore";
 
-import "./Home.css";
 import { useHistory } from "react-router-dom";
+import { getWeather } from "../services/weatherServices";
+
+import "./Home.css";
 
 interface Place {
   id: string;
@@ -33,6 +39,9 @@ const Home: React.FC = () => {
   const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
+  const [weather, setWeather] = useState<any>(null);
+  const [searchText, setSearchText] = useState("");
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   const history = useHistory();
 
@@ -40,8 +49,22 @@ const Home: React.FC = () => {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
 
+    const q = query(
+      collection(db, "favorites"),
+      where("uid", "==", uid),
+      where("placeId", "==", place.id)
+    );
+
+    const snapshot = await getDocs(q);
+
+    if (!snapshot.empty) {
+      history.push("/save");
+      return;
+    }
+
     await addDoc(collection(db, "favorites"), {
       uid,
+      placeId: place.id,
       name: place.name,
       image: place.image,
       location: place.location
@@ -50,22 +73,64 @@ const Home: React.FC = () => {
     history.push("/save");
   };
 
+  const getCustomIcon = () => {
+    const temp = weather?.list?.[0]?.main?.temp;
+    const condition = weather?.list?.[0]?.weather?.[0]?.main;
+
+    if (temp >= 33) {
+      return "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+    }
+
+    if (condition === "Rain") {
+      return "https://cdn-icons-png.flaticon.com/512/1163/1163624.png";
+    }
+
+    if (condition === "Clouds") {
+      return "https://cdn-icons-png.flaticon.com/512/414/414927.png";
+    }
+
+    return "https://cdn-icons-png.flaticon.com/512/869/869869.png";
+  };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      const uid = auth.currentUser?.uid;
-      if (!uid) return;
-
-      const snap = await getDoc(doc(db, "profile", uid));
-
-      if (snap.exists()) {
-        const data = snap.data();
-        setUsername(data.username || "");
-      }
+    const fetchWeather = async () => {
+      const data = await getWeather();
+      setWeather(data);
     };
 
-    fetchProfile();
+    fetchWeather();
+  }, []);
 
-    const unsubscribe = onSnapshot(
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+
+    let unsubscribeFavorites = () => {};
+    let unsubscribePlaces = () => {};
+
+    if (uid) {
+      const q = query(
+        collection(db, "favorites"),
+        where("uid", "==", uid)
+      );
+
+      unsubscribeFavorites = onSnapshot(q, (snapshot) => {
+        const ids = snapshot.docs.map(doc => doc.data().placeId);
+        setFavorites(ids);
+      });
+
+      const fetchProfile = async () => {
+        const snap = await getDoc(doc(db, "profile", uid));
+
+        if (snap.exists()) {
+          const data = snap.data();
+          setUsername(data.username || "");
+        }
+      };
+
+      fetchProfile();
+    }
+
+    unsubscribePlaces = onSnapshot(
       collection(db, "places"),
       (snapshot) => {
         const data = snapshot.docs.map(doc => ({
@@ -78,8 +143,15 @@ const Home: React.FC = () => {
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeFavorites();
+      unsubscribePlaces();
+    };
   }, []);
+
+  const filteredPlaces = places.filter((place) =>
+    place.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   return (
     <IonPage>
@@ -89,7 +161,7 @@ const Home: React.FC = () => {
           <div className="header-container">
             <div className="user-info">
               <IonAvatar>
-                <img src="https://i.pravatar.cc/100" alt="avatar" />
+                <img src="https://i.pravatar.cc/150?img=12" alt="avatar" />
               </IonAvatar>
 
               <div>
@@ -100,7 +172,12 @@ const Home: React.FC = () => {
           </div>
 
           <div className="search-bar">
-            <input type="text" placeholder="Search Destination" />
+            <input
+              type="text"
+              placeholder="Search Destination"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
           </div>
 
         </IonToolbar>
@@ -108,25 +185,36 @@ const Home: React.FC = () => {
 
       <IonContent className="ion-padding">
 
+        {/* WEATHER */}
         <section className="weather-section">
           <h2>Today's Weather</h2>
 
           <div className="weather-card">
+
             <div className="weather-left">
-              <h1>28°C</h1>
-              <p>Partly Cloudy</p>
-              <span>Humidity: 65%</span>
+              <h1>
+                {weather?.list?.[0]?.main?.temp
+                  ? Math.round(weather.list[0].main.temp)
+                  : "--"}°C
+              </h1>
+
+              <p>
+                {weather?.list?.[0]?.weather?.[0]?.main || "Loading..."}
+              </p>
+
+              <span>
+                Humidity: {weather?.list?.[0]?.main?.humidity ?? "--"}%
+              </span>
             </div>
 
             <div className="weather-right">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/1163/1163661.png"
-                alt="weather"
-              />
+              <img src={getCustomIcon()} alt="weather" />
             </div>
+
           </div>
         </section>
 
+        {/* PLACES */}
         <section>
           <div className="section-header">
             <h2>Recommended Places</h2>
@@ -134,8 +222,12 @@ const Home: React.FC = () => {
 
           {loading && <p>Loading...</p>}
 
+          {!loading && filteredPlaces.length === 0 && (
+            <p>No places found</p>
+          )}
+
           <div className="card-row">
-            {places.map(place => (
+            {filteredPlaces.map(place => (
               <IonCard
                 key={place.id}
                 onClick={() => history.push(`/place/${place.id}`)}
@@ -148,12 +240,15 @@ const Home: React.FC = () => {
 
                   <IonButton
                     expand="block"
+                    disabled={favorites.includes(place.id)}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAddFavorite(place);
                     }}
                   >
-                    Add to Favorite
+                    {favorites.includes(place.id)
+                      ? "Saved"
+                      : "Add to Favorite"}
                   </IonButton>
 
                 </IonCardContent>

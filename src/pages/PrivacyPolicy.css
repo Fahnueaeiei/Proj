@@ -1,0 +1,50 @@
+.policy-content {
+  --background: #F8FAFC;
+}
+
+.policy-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px;
+}
+
+.policy-top h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+  color: #0F172A;
+  flex: 1;
+}
+
+.back-icon {
+  font-size: 22px;
+  color: #2563EB;
+  cursor: pointer;
+  padding-top: 4px;
+}
+
+.policy-body {
+  margin: 0 20px 40px 20px;
+}
+
+.policy-updated {
+  font-size: 13px;
+  color: #94A3B8;
+  margin-bottom: 24px;
+}
+
+.policy-body h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+.policy-body p {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.7;
+  margin: 0;
+}

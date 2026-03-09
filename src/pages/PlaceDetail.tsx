@@ -6,67 +6,40 @@ import {
   IonTitle,
   IonButtons,
   IonBackButton,
-  IonSpinner,
-  IonButton
-} from "@ionic/react";
+  IonIcon,
+  IonSpinner
+} from '@ionic/react';
 
-import { useParams, useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { locationOutline, starOutline, pricetagOutline } from 'ionicons/icons';
 
-import { db, auth } from "../firebase";
-import {
-  doc,
-  getDoc,
-  addDoc,
-  collection
-} from "firebase/firestore";
+import './PlaceDetail.css';
 
 interface Place {
   name: string;
   image: string;
   location: string;
   description: string;
-  lat: number;
-  lng: number;
+  category?: string;
+  rating?: number;
 }
 
 const PlaceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const history = useHistory();
-
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPlace = async () => {
-      const docRef = doc(db, "places", id);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        setPlace(docSnap.data() as Place);
-      }
-
+      const snap = await getDoc(doc(db, 'places', id));
+      if (snap.exists()) setPlace(snap.data() as Place);
       setLoading(false);
     };
-
     fetchPlace();
   }, [id]);
-
-  const handleAddFavorite = async () => {
-    if (!place) return;
-
-    const uid = auth.currentUser?.uid;
-    if (!uid) return;
-
-    await addDoc(collection(db, "favorites"), {
-      uid,
-      name: place.name,
-      image: place.image,
-      location: place.location
-    });
-
-    history.push("/save");
-  };
 
   return (
     <IonPage>
@@ -75,48 +48,58 @@ const PlaceDetail: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/home" />
           </IonButtons>
-
-          <IonTitle>{place?.name || "Place Detail"}</IonTitle>
+          <IonTitle>{place?.name || 'Place Detail'}</IonTitle>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="ion-padding">
+      <IonContent className="place-detail-page">
 
-        {loading && <IonSpinner />}
+        {loading && (
+          <div className="spinner-wrap">
+            <IonSpinner />
+          </div>
+        )}
 
         {place && (
           <>
-            <img
-              src={place.image}
-              alt={place.name}
-              style={{
-                width: "100%",
-                borderRadius: "16px",
-                marginBottom: "20px"
-              }}
-            />
+            {/* Hero */}
+            <div className="hero-wrapper">
+              <img src={place.image} alt={place.name} className="hero-image" />
+              <div className="hero-overlay" />
+              <div className="hero-text">
+                <h1 className="hero-title">{place.name}</h1>
+                <span className="hero-chip">
+                  <IonIcon icon={locationOutline} />
+                  {place.location}
+                </span>
+              </div>
+            </div>
 
-            <h2>{place.name}</h2>
+            <div className="detail-body">
 
-            <p>{place.location}</p>
+              {/* Badges */}
+              <div className="badge-row">
+                {place.category && (
+                  <div className="detail-badge">
+                    <IonIcon icon={pricetagOutline} />
+                    {place.category}
+                  </div>
+                )}
+                {place.rating && (
+                  <div className="detail-badge highlight">
+                    <IonIcon icon={starOutline} />
+                    {place.rating} / 5
+                  </div>
+                )}
+              </div>
 
-            <p>{place.description}</p>
+              {/* Description */}
+              <div className="info-section">
+                <h2 className="section-title">About this place</h2>
+                <p className="description-text">{place.description}</p>
+              </div>
 
-            <IonButton
-              expand="block"
-              onClick={handleAddFavorite}
-            >
-              Add to Favorite
-            </IonButton>
-
-            <IonButton
-              expand="block"
-              fill="outline"
-              href={`https://www.google.com/maps?q=${place.lat},${place.lng}`}
-              target="_blank"
-            >
-              Open in Maps
-            </IonButton>
+            </div>
           </>
         )}
 

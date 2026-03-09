@@ -1,17 +1,61 @@
+/* Upload Box */
 .upload-box {
-  border: 2px dashed #ccc;
-  border-radius: 12px;
-  padding: 40px;
-  text-align: center;
-  color: #888;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 2px dashed #2563eb;
+  border-radius: 16px;
+  padding: 32px 24px;
   margin-bottom: 20px;
+
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  /* ทำให้ label ครอบ input ซ่อนได้ */
+  position: relative;
+  overflow: hidden;
 }
 
-.custom-item {
-  margin-bottom: 16px;
+.upload-box:hover {
+  background: rgba(37, 99, 235, 0.05);
+  border-color: #1d4ed8;
 }
 
-.next-btn {
-  --background: black;
-  margin-top: 20px;
+.upload-box:active {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.upload-box ion-icon {
+  font-size: 40px;
+  color: #2563eb;
+}
+
+.upload-box p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.upload-box ion-note {
+  font-size: 12px;
+  color: var(--ion-color-medium);
+}
+
+/* เมื่อมี preview — ไม่ต้อง padding เพิ่ม */
+.upload-box:has(img) {
+  padding: 0;
+  border-style: solid;
+}
+
+.upload-box img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 14px; /* -2px จาก border-radius ของ box */
+  display: block;
 }

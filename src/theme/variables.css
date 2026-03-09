@@ -1,68 +1,50 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
 .custom-tabbar {
-  --background: #ffffff;
+  --background: #FFFFFF;
+
+  height: 75px;
+  padding-bottom: 10px;
+
   border-top: none;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-  height: 65px;
+
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+
+  position: relative;
 }
 
+/* TAB BUTTON */
+
 .custom-tabbar ion-tab-button {
-  color: #999;
+  color: #999999;
 }
 
 .custom-tabbar ion-tab-button.tab-selected {
-  color: #f7b500;
+  color: #2563EB;
 }
 
-.custom-fab {
-  --background: #f7b500;
-  width: 60px;
-  height: 60px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.custom-tabbar {
-  --background: #ffffff;
-  height: 70px;
-  position: relative;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
+/* FAB CONTAINER */
 
 .fab-container {
   position: absolute;
+
   top: -25px;
   left: 50%;
+
   transform: translateX(-50%);
 }
 
-.custom-fab {
-  --background: #f7b500;
-  width: 60px;
-  height: 60px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
+/* CENTER FAB */
 
-/* ทำให้ TabBar สูงขึ้น */
-.custom-tabbar {
-  --background: #ffffff;
-  height: 75px;
-  padding-bottom: 10px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
-
-/* จัดตำแหน่ง FAB */
 .center-fab {
-  bottom: 20px;   /* ปรับตำแหน่งขึ้นลง */
+  bottom: 20px;
 }
 
-/* ปุ่ม */
+/* FAB BUTTON */
+
 .custom-fab {
-  --background: #f7b500;
+  --background: #2563EB;
+
   width: 65px;
   height: 65px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
-
-

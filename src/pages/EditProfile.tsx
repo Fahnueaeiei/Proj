@@ -105,6 +105,7 @@ const EditProfile: React.FC = () => {
               <IonInput
                 className="custom-input"
                 value={fullName}
+                readonly
                 onIonChange={(e) => setFullName(e.detail.value!)}
               />
             </div>
@@ -114,6 +115,7 @@ const EditProfile: React.FC = () => {
               <IonInput
                 className="custom-input"
                 value={email}
+                readonly
                 onIonChange={(e) => setEmail(e.detail.value!)}
               />
             </div>
@@ -123,6 +125,7 @@ const EditProfile: React.FC = () => {
               <IonInput
                 className="custom-input"
                 value={phoneNumber}
+                readonly
                 onIonChange={(e) => setPhoneNumber(e.detail.value!)}
               />
             </div>
