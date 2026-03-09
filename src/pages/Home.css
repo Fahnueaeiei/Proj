@@ -1,0 +1,98 @@
+.home-header {
+  --background: #f7b500;
+  color: white;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+}
+
+.home-header ion-toolbar {
+  --min-height: 80px;   /* ลดความสูง */
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-bar {
+  padding: 10px 16px 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+}
+
+.weather-section {
+  margin-bottom: 20px;
+}
+
+.weather-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff4cc;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.weather-left h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+.weather-right img {
+  width: 80px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+ion-card img {
+  height: 140px;
+  object-fit: cover;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .card-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .card-row {
+    grid-template-columns: 1fr;
+  }
+
+  .weather-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .weather-right img {
+    margin-top: 10px;
+  }
+}
