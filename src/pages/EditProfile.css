@@ -1,0 +1,132 @@
+.edit-content {
+  --background: #F8FAFC;
+  padding: 20px;
+}
+
+/* Header */
+.edit-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px;
+}
+
+.edit-top h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0F172A;
+  font-size: 30px;
+  font-weight: bold;    
+  flex: 1;
+}
+
+.back-icon {
+  font-size: 22px;
+  color: #2563EB;
+  cursor: pointer;
+  margin-left: 4px;
+  padding-top: 6px;
+}
+
+/* Avatar */
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.edit-avatar {
+  width: 110px;
+  height: 110px;
+}
+
+.camera-icon {
+  position: absolute;
+  bottom: 0;
+  right: 35%;
+  background: #2563EB;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+}
+
+/* Inputs */
+.form-section {
+  margin-bottom: 30px;
+}
+
+.input-item {
+  --background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 20px;
+}
+
+.button-section {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: flex-end;   
+}
+
+.button-section ion-button {
+  flex: 1;             
+  max-width: 160px;      
+}
+
+/* Save Button */
+.save-btn {
+  --background: #2563EB;
+  --background-hover: #1E40AF;
+  --background-activated: #1E40AF;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  margin: 20px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+  --border-color: #2563EB;
+  --color: #2563EB;
+  border-radius: 12px;
+  margin: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #64748B;   /* text secondary */
+  margin: 20px;
+}
+
+.custom-input {
+  --background: #ffffff;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --border-radius: 12px;
+  border-radius: 12px;
+  background: #ffffff;
+  height: 50px;
+  margin: 20px;
+}
+
+.custom-input {
+  background: #ffffff;
+  border-radius: 12px;
+  height: 50px;
+  padding-left: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
